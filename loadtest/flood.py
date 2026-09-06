@@ -29,7 +29,7 @@ def parse_args() -> argparse.Namespace:
                    help="total requests to send (default: %(default)s)")
     p.add_argument("--concurrency", type=int, default=1000,
                    help="max in-flight requests at once (default: %(default)s)")
-    p.add_argument("--ramp", type=float, default=0.0,
+    p.add_argument("--ramp", type=float, default=60.0,
                    help="seconds to spread request starts over; 0 = fire as fast as possible")
     p.add_argument("--timeout", type=float, default=30.0,
                    help="per-request timeout in seconds (default: %(default)s)")
@@ -63,6 +63,7 @@ async def buy(session: aiohttp.ClientSession, url: str, user_id: str,
             stats["samples"].append(f"{type(e).__name__}: {e}")
 
 
+# the conductor - carries out the request firing 
 async def run(args: argparse.Namespace) -> dict:
     stats = {
         "http": Counter(),
@@ -72,10 +73,13 @@ async def run(args: argparse.Namespace) -> dict:
     }
     sem = asyncio.Semaphore(args.concurrency)
     # connector limit slightly above the semaphore so the semaphore is the real gate
+    # 1. Configures the connection rules (Returns the TCPConnector object)
     connector = aiohttp.TCPConnector(limit=args.concurrency + 50, limit_per_host=args.concurrency + 50)
     gap = (args.ramp / args.total) if args.ramp > 0 else 0.0
 
+    # 2. Passes the connector object to the session
     async with aiohttp.ClientSession(connector=connector) as session:
+        # 3. Now the session enforces those connection limits when you make requests
         tasks = []
         wall_start = time.perf_counter()
         for i in range(1, args.total + 1):
@@ -85,10 +89,10 @@ async def run(args: argparse.Namespace) -> dict:
             if gap:
                 await asyncio.sleep(gap)
         await asyncio.gather(*tasks)
+            # await buy(session, args.url, uid, sem, args.timeout, stats)
         stats["wall"] = time.perf_counter() - wall_start
 
     return stats
-
 
 def pct(values: list[float], p: float) -> float:
     if not values:

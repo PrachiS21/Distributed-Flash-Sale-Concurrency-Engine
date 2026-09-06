@@ -11,4 +11,9 @@ cd loadtest
 # 4. confirm the damage in the DB
 psql -U postgres -d bigB_days -f backend/db/check.sql
 
-
+cd ..
+psql -U postgres -d bigB_days -f backend/db/check.sql     
+psql -U postgres -d bigB_days -f backend/db/reset.sql
+cd loadtest                                               
+./.venv/bin/python flood.py --total 50000 --concurrency 1000
+Prachi@123
