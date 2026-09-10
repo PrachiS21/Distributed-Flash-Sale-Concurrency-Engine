@@ -29,7 +29,7 @@ def parse_args() -> argparse.Namespace:
                    help="total requests to send (default: %(default)s)")
     p.add_argument("--concurrency", type=int, default=1000,
                    help="max in-flight requests at once (default: %(default)s)")
-    p.add_argument("--ramp", type=float, default=60.0,
+    p.add_argument("--ramp", type=float, default=0.0,
                    help="seconds to spread request starts over; 0 = fire as fast as possible")
     p.add_argument("--timeout", type=float, default=30.0,
                    help="per-request timeout in seconds (default: %(default)s)")

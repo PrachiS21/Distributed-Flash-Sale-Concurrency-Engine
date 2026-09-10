@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Optional<Ticket> findFirstByStatus(String status);
+    Optional<Ticket> findByTicketCode(String ticketCode);
 
     // Locks the next AVAILABLE ticket(s) with SELECT ... FOR UPDATE SKIP LOCKED.
     // "-2" is Hibernate's SKIP_LOCKED lock timeout: a concurrent caller never queues

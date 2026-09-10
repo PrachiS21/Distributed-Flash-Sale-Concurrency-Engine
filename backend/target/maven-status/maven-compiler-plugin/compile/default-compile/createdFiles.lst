@@ -1,4 +1,6 @@
 com/flashsale/naive/Ticket.class
+com/flashsale/naive/TicketService.class
 com/flashsale/naive/NaiveServiceApplication.class
 com/flashsale/naive/TicketController.class
 com/flashsale/naive/TicketRepository.class
+com/flashsale/naive/RedisConfig.class

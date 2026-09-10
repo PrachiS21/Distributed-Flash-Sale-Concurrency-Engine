@@ -17,3 +17,13 @@ psql -U postgres -d bigB_days -f backend/db/reset.sql
 cd loadtest                                               
 ./.venv/bin/python flood.py --total 50000 --concurrency 1000
 Prachi@123
+
+
+# Stage #2 Redis
+cd ../loadtest
+./.venv/bin/python flood.py --total 100000 --concurrency 2000
+psql -U postgres -d bigB_days -f backend/db/check.sql
+redis-cli LLEN flash:tickets:available    # expect 0
+redis-cli HLEN flash:tickets:owner        # expect 100
+
+./reset.sh
