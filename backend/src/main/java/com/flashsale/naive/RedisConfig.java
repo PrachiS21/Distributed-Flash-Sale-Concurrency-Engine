@@ -28,7 +28,7 @@ public class RedisConfig {
                 redis.opsForList().rightPushAll(availableKey, codes);
             }
         };
-}
+    }
 
     // Lua script
     @Bean
