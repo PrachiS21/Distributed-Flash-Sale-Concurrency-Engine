@@ -1,3 +1,9 @@
+backend/target/
+backend/accepting
+backend/pom.xml
+backend/PONG
+
+loadtest/.venv/
+
 TASKS_TODO.md
-backend/target
 CLAUDE.md
