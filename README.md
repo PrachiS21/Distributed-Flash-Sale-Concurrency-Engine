@@ -55,8 +55,6 @@ At startup, `RedisConfig.seedRedis` fills `flash:tickets:available` from the Pos
 
 ### v3's remaining gaps (→ v4 message queue)
 
-- **Crash between the Redis claim and the Postgres save** leaves the two stores disagreeing.
-- **Redis restarts without persistence** → startup reseeds from Postgres → a ticket could be sold twice.
 - **Still synchronous:** each request holds a thread until the Postgres write finishes.
 
 ## Tech stack
