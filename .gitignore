@@ -1,6 +1,5 @@
 backend/target/
 backend/accepting
-backend/pom.xml
 backend/PONG
 
 loadtest/.venv/

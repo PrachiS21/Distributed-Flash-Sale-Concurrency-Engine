@@ -1,0 +1,36 @@
+=== v3 Redis Lua Script — 100k requests, concurrency 1000 ===
+Run: 2026-09-20 17:10:00
+Command: flood.py --total 100000 --concurrency 1000 --url http://localhost:8080/buy
+Backend commit: b5ec31f (Redis Lua)
+
+
+========================================================
+  target        http://localhost:8080/buy
+  requests      100000   concurrency 1000   ramp 0.0s
+  wall time     19.94s   throughput 5,015 req/s
+--------------------------------------------------------
+  HTTP status
+    200: 100
+    400: 99900
+  outcomes
+    purchased   100
+    sold_out    99900
+--------------------------------------------------------
+  latency ms    p50 158   p95 254   p99 560   max 872
+========================================================
+  exactly 100 purchases reported by the client — check the DB for the real count
+
+Confirmed against the DB:
+    psql -U postgres -d bigB_days -f ../backend/db/check.sql
+
+=== DB check (backend/db/check.sql) ===
+ status |  n  
+--------+-----
+ SOLD   | 100
+(1 row)
+
+ sold_rows | distinct_winners 
+-----------+------------------
+       100 |              100
+(1 row)
+

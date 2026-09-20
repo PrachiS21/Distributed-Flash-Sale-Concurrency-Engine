@@ -222,12 +222,12 @@ Remove the worktrees when you're done: `git worktree remove ../RACE-v1-naive` (a
 
 Use the same flood parameters for every version so the numbers are comparable.
 
-| Version | Command | Purchased (client) | SOLD rows / distinct winners | Throughput (req/s) | p50 / p99 (ms) | Errors |
+| Version | Command | Purchased (client) | SOLD rows / distinct winners | Throughput (req/s) | p50 / p99 (ms) | Errors (5xx / timeout / conn) |
 |---|---|---|---|---|---|---|
-| v1 naive | `--total 50000 --concurrency 1000` | | | | | |
-| v2 PG lock | `--total 50000 --concurrency 1000` | | | | | |
-| v3 Redis | `--total 50000 --concurrency 1000` | | | | | |
-| v3 Redis ×2 instances | 2 × `--total 25000 --concurrency 500` | | | | | |
+| v1 naive | `--total 50000 --concurrency 1000` | 976 (OVERSOLD, +876) | 100 / 100 | 4,689 | 165 / 644 | 0 |
+| v2 PG lock | `--total 50000 --concurrency 1000` | 100 | 100 / 100 | 4,480 | 172 / 575 | 0 |
+| v3 Redis | `--total 50000 --concurrency 1000` | 100 | 100 / 100 | 3,675 | 224 / 441 | 0 |
+
 
 ## Troubleshooting
 

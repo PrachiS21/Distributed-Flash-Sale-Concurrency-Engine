@@ -1,0 +1,36 @@
+=== v2 Postgres row lock (SELECT ... FOR UPDATE SKIP LOCKED) — 100k requests, concurrency 1000 ===
+Run: 2026-09-20 16:49:53
+Command: flood.py --total 100000 --concurrency 1000 --url http://localhost:8080/buy
+Backend commit: 89a96f0 (Postgres Atomic lock)
+
+
+========================================================
+  target        http://localhost:8080/buy
+  requests      100000   concurrency 1000   ramp 0.0s
+  wall time     21.84s   throughput 4,579 req/s
+--------------------------------------------------------
+  HTTP status
+    200: 100
+    400: 99900
+  outcomes
+    purchased   100
+    sold_out    99900
+--------------------------------------------------------
+  latency ms    p50 170   p95 279   p99 396   max 732
+========================================================
+  exactly 100 purchases reported by the client — check the DB for the real count
+
+  now confirm against the DB:
+    psql -U postgres -d bigB_days -f ../backend/db/check.sql
+
+=== DB check (backend/db/check.sql) ===
+ status |  n  
+--------+-----
+ SOLD   | 100
+(1 row)
+
+ sold_rows | distinct_winners 
+-----------+------------------
+       100 |              100
+(1 row)
+

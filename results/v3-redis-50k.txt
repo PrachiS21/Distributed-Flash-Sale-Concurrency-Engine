@@ -1,0 +1,29 @@
+
+========================================================
+  target        http://localhost:8080/buy
+  requests      50000   concurrency 1000   ramp 0.0s
+  wall time     13.60s   throughput 3,675 req/s
+--------------------------------------------------------
+  HTTP status
+    200: 100
+    400: 49900
+  outcomes
+    purchased   100
+    sold_out    49900
+--------------------------------------------------------
+  latency ms    p50 224   p95 295   p99 441   max 863
+========================================================
+  exactly 100 purchases reported by the client — check the DB for the real count
+
+  now confirm against the DB:
+    psql -U postgres -d bigB_days -f ../backend/db/check.sql
+ status |  n  
+--------+-----
+ SOLD   | 100
+(1 row)
+
+ sold_rows | distinct_winners 
+-----------+------------------
+       100 |              100
+(1 row)
+

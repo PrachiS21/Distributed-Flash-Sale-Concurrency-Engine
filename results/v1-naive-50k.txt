@@ -1,0 +1,37 @@
+=== v1 naive (check-then-act) — 50k requests, concurrency 1000 ===
+Run: 2026-09-18 23:17:20
+Command: flood.py --total 50000 --concurrency 1000 --url http://localhost:8080/buy
+Backend commit: c0a41af (initial commit)
+
+========================================================
+  target        http://localhost:8080/buy
+  requests      50000   concurrency 1000   ramp 0.0s
+  wall time     10.66s   throughput 4,689 req/s
+--------------------------------------------------------
+  HTTP status
+    200: 976
+    400: 49024
+  outcomes
+    purchased   976
+    sold_out    49024
+--------------------------------------------------------
+  latency ms    p50 165   p95 276   p99 644   max 1082
+========================================================
+  OVERSOLD: service returned 976 successful purchases for 100 tickets (+876)
+
+  now confirm against the DB:
+    psql -U postgres -d bigB_days -f ../backend/db/check.sql
+
+
+
+=== DB check (backend/db/check.sql) ===
+ status |  n  
+--------+-----
+ SOLD   | 100
+(1 row)
+
+ sold_rows | distinct_winners 
+-----------+------------------
+       100 |              100
+(1 row)
+
