@@ -226,7 +226,9 @@ Use the same flood parameters for every version so the numbers are comparable.
 |---|---|---|---|---|---|---|
 | v1 naive | `--total 50000 --concurrency 1000` | 976 (OVERSOLD, +876) | 100 / 100 | 4,689 | 165 / 644 | 0 |
 | v2 PG lock | `--total 50000 --concurrency 1000` | 100 | 100 / 100 | 4,480 | 172 / 575 | 0 |
+| v2 PG lock | `--total 100000 --concurrency 1000` | 100 | 100 / 100 | 4,579 | 170 / 396 | 0 |
 | v3 Redis | `--total 50000 --concurrency 1000` | 100 | 100 / 100 | 3,675 | 224 / 441 | 0 |
+| v3 Redis | `--total 100000 --concurrency 1000` | 100 | 100 / 100 | 5,015 | 158 / 560 | 0 |
 
 
 ## Troubleshooting
