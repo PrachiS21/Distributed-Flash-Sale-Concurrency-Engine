@@ -6,7 +6,7 @@ Sell **exactly 100 tickets** to **50,000 people** who all arrive in the same 60 
 
 1. Build a naive service that fails (oversells tickets).
 2. Build a load client that simulates the 50k requests and proves the service breaks.
-3. Fix the concurrency issue, evaluating **Database Locks**, **Redis Atomic Counters** and **Message Queues**.
+3. Fix the concurrency issue, evaluating **Database Locks** and **Redis Atomic Counters**.
 
 ## Versions
 
@@ -15,7 +15,7 @@ Sell **exactly 100 tickets** to **50,000 people** who all arrive in the same 60 
 | v1 | The Glass House (naive) | `c0a41af` | Check-then-act: `findFirstByStatus('AVAILABLE')` → 5 ms simulated latency → `save` | Oversells (on purpose) |
 | v2 | Postgres row lock | `89a96f0` | `SELECT … FOR UPDATE SKIP LOCKED` on the next available row, inside one transaction | Correct, bounded by the DB pool |
 | **v3** | **Redis atomic claim (current)** | `ed61cf9` / `main` | Lua script `LPOP` + `HSET` in Redis, then persist the sale to Postgres | **Correct, horizontally scalable** |
-| v4 | Message queue | – | – | Planned |
+
 
 ### Current version (v3): Redis atomic claim
 
